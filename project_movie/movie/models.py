@@ -25,10 +25,10 @@ class User(AbstractUser):
 
 
 class Country(models.Model):
-    country = models.CharField(max_length=100, unique=True)
+    country_name = models.CharField(max_length=100, unique=True)
 
     def __str__(self) -> str:
-        return self.country
+        return self.country_name
 
 
 class Directory(models.Model):
