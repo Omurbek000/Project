@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from .models import (
     User,
     Country,
@@ -14,25 +14,22 @@ from .models import (
     FavoriteMovie,
     History,
 )
-from .serializers import (
-    UserSerializer,
-    CountrySerializer,
-    DirectorySerializer,
-    ActorSerializer,
-    GenreSerializer,
-    MovieSerializer,
-    MovieLanguagesSerializer,
-    MomentsSerializer,
-    RatingSerializer,
-    FavoriteSerializer,
-    FavoriteMovieSerializer,
-    HistorySerializer,
-)
+from .serializers import *
 
-
-class UserViewSet(viewsets.ModelViewSet):
+class UserListAPIView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    
+    def get_queryset(self):
+        return User.objects.filter(id=self.request.user.id)
+
+
+class UserEditAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    
+    def get_queryset(self):
+        return User.objects.filter(id=self.request.user.id)
 
 
 class CountryViewSet(viewsets.ModelViewSet):
@@ -55,9 +52,14 @@ class GenreViewSet(viewsets.ModelViewSet):
     serializer_class = GenreSerializer
 
 
-class MovieViewSet(viewsets.ModelViewSet):
+class MovieListAPIView(generics.ListAPIView):
     queryset = Movie.objects.all()
-    serializer_class = MovieSerializer
+    serializer_class = MovieListSerializer
+
+
+class MovieDetailAPIView(generics.RetrieveAPIView):
+    queryset = Movie.objects.all()
+    serializer_class = MovieDetailtSerializer
 
 
 class MovieLanguagesViewSet(viewsets.ModelViewSet):

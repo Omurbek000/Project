@@ -88,14 +88,14 @@ class Movie(models.Model):
 class MovieLanguages(models.Model):
     languages = models.CharField(max_length=32)
     video = models.FileField(upload_to="movie_video/")
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='movie_videos')
 
     def __str__(self) -> str:
         return f"{self.languages}, {self.movie}"
 
 
 class Moments(models.Model):
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='moments')
     movie_moments = models.ImageField(upload_to="movei_moments")
 
     def __str__(self) -> str:
@@ -105,7 +105,7 @@ class Moments(models.Model):
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='ratings')
     stars = models.PositiveSmallIntegerField(
         choices=[(i, str(i)) for i in range(1, 11)]
     )
